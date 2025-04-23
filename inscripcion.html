@@ -31,6 +31,29 @@
             gap: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
     .error { color: #ffcccc; font-size: 0.9rem; margin-top: 10px; }
+            .whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25D366;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  background-color: #1ebc59;
+}
   </style>
     </head>
     <body>
@@ -50,7 +73,12 @@
             <a id="grupo-link" href="https://chat.whatsapp.com/tu-enlace-del-grupo" target="_blank">Unirme al grupo de WhatsApp</a>
 
         </div>
-
+ <a href="https://wa.me/59177348087" 
+   class="whatsapp-float" 
+   target="_blank" 
+   title="Contactar por WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
         <script>
     const codigosValidos = ["DIGI1", "DIGI2","DIGI3", "DIGI4", "DIGI5", "DIGI6", "DIGI"]; // Añade más códigos si deseas
 
