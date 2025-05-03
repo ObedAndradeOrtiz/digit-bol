@@ -1,109 +1,46 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DigitBol</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-
-    body, html {
-      height: 100%;
-      background: linear-gradient(135deg, #001F3F 30%, #004080 70%);
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      color: white;
-    }
-
-    .top-section {
-      
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .top-section img {
-      width: 150px; /* Tamaño del logo */
-      height: 150px; /* Tamaño del logo */
-      border-radius: 50%; /* Hace que el logo sea redondo */
-      border: 5px solid #003366; /* Borde azul marino */
-      margin-bottom: 20px;
-    }
-
-    .top-section h1 {
-      font-size: 1.5rem;
-      color: #ffffff;
-      margin-bottom: 10px;
-    }
-
-    .top-section p {
-      font-size: 1rem;
-      color: #ddd;
-      max-width: 300px;
-    }
-
-    .bottom-section {
-      flex: 0.7;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-     
-    }
-
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 100%;
-      max-width: 300px;
-    }
-
-    .buttons a {
-      text-align: center;
-      padding: 12px;
-      background-color: #007BFF;
-      color: white;
-      text-decoration: none;
-      border-radius: 30px;
-      font-weight: 600;
-      transition: background 0.3s ease;
-    }
-
-    .buttons a:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <title>Usuario B</title>
 </head>
 <body>
-  <div class="container">
-    <div class="top-section">
-      <img src="assets/img/logo.jpeg" alt="DigitBol Logo">
-      <h1>Digitalizando Bolivia</h1>
-      <p>Impulsamos el desarrollo tecnológico del país con sitios web, blockchain e inteligencia artificial.</p>
-    </div>
-    <div class="bottom-section">
-      <div class="buttons">
-        <a href="#">🌐 Sitio Web</a>
-        <a href="#">📸 Instagram</a>
-        <a href="#">✉️ Contacto</a>
-        <a href="#">📘 Aprende Blockchain</a>
-        <a href="#">🤖 Aprende IA</a>
-      </div>
-    </div>
-  </div>
+  <h2>Usuario B</h2>
+  <button onclick="register()">Registrarse como 'B'</button>
+
+  <script>
+    let pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+    let ws = new WebSocket('ws://spamiora.ddns.net:8081');
+
+    ws.onmessage = async (msg) => {
+      const data = JSON.parse(msg.data);
+      if (data.sdp) {
+        await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        ws.send(JSON.stringify({ type: 'call', name: 'B', to: data.from, sdp: answer }));
+      }
+      if (data.candidate) {
+        await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+      }
+    };
+
+    pc.ontrack = (e) => {
+      const audio = new Audio();
+      audio.srcObject = e.streams[0];
+      audio.play();
+    };
+
+    async function register() {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      stream.getTracks().forEach(t => pc.addTrack(t, stream));
+      ws.send(JSON.stringify({ type: 'register', name: 'B' }));
+
+      pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          ws.send(JSON.stringify({ type: 'call', name: 'B', to: 'A', candidate: event.candidate }));
+        }
+      };
+    }
+  </script>
 </body>
 </html>
