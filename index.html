@@ -1,46 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Usuario B</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigitBol</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+      background: linear-gradient(135deg, #001F3F 30%, #004080 70%);
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 5px solid #003366;
+      margin-top: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #ddd;
+      max-width: 500px;
+      margin-bottom: 30px;
+    }
+
+    a.whatsapp-button {
+      background-color: #25D366;
+      color: white;
+      font-weight: bold;
+      padding: 12px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      display: inline-block;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease;
+    }
+
+    a.whatsapp-button:hover {
+      background-color: #1ebc59;
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+      background-color: #1ebc59;
+    }
+  </style>
 </head>
 <body>
-  <h2>Usuario B</h2>
-  <button onclick="register()">Registrarse como 'B'</button>
+  <div class="container">
+    <img src="assets/img/logo.jpeg" alt="DigitBol Logo">
+    <h1>Bienvenidos a DigitBol</h1>
+    <h3>Impulsando la digitalización en Bolivia</h3>
+    <p>
+      En DigitBol ayudamos a emprendedores, negocios y profesionales a dar el salto digital
+      con herramientas modernas, automatización y soluciones inteligentes.
+      Nuestro objetivo es transformar ideas en realidades digitales que conecten
+      con las personas y generen impacto real.
+    </p>
+    <a class="whatsapp-button" href="https://wa.me/59177348087" target="_blank">
+      <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+    </a>
+  </div>
 
-  <script>
-    let pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
-    let ws = new WebSocket('ws://spamiora.ddns.net:8081');
-
-    ws.onmessage = async (msg) => {
-      const data = JSON.parse(msg.data);
-      if (data.sdp) {
-        await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
-        ws.send(JSON.stringify({ type: 'call', name: 'B', to: data.from, sdp: answer }));
-      }
-      if (data.candidate) {
-        await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
-      }
-    };
-
-    pc.ontrack = (e) => {
-      const audio = new Audio();
-      audio.srcObject = e.streams[0];
-      audio.play();
-    };
-
-    async function register() {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-      stream.getTracks().forEach(t => pc.addTrack(t, stream));
-      ws.send(JSON.stringify({ type: 'register', name: 'B' }));
-
-      pc.onicecandidate = (event) => {
-        if (event.candidate) {
-          ws.send(JSON.stringify({ type: 'call', name: 'B', to: 'A', candidate: event.candidate }));
-        }
-      };
-    }
-  </script>
+  <a href="https://wa.me/59177348087" 
+     class="whatsapp-float" 
+     target="_blank" 
+     title="Contactar por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 </body>
 </html>
